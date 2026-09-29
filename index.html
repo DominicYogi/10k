@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will You Be My Bridesmaid?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+<meta name="theme-color" content="#2a0510">
+<style>
+/* ===== Your PNGs: put them in a "frames" folder next to this file ===== */
+:root{
+  --frame-photo:url('frames/photo.png');
+  --frame-arch:url('frames/arch.png');
+  --frame-card:url('frames/card.png');
+  --bg-vines:url('frames/vines.png');
+  --cover-art-opacity:.55; /* 1 = solid, lower = fainter so text stays readable */
+  --env-tilt:-5deg;                                  /* set 0deg for a straight envelope */
+  --vines-opacity:.3;        /* 0 hides the vines, 1 is full strength */
+  --pink:#f9d2d5; --ink:#4a1420; --accent:#a3143f; --wine:#6b0f2a; --deep:#2a0510; --rose:#f3a9bd;
+  --serif:'Cormorant Garamond',Georgia,serif; --script:'Great Vibes',cursive; --sans:'Jost',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--deep);font-family:var(--serif);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.script{font-family:var(--script);font-weight:400}
+.caps{font:500 .7rem var(--sans);letter-spacing:.24em;text-transform:uppercase}
+
+/* ===== Phone-width stage with 3 pages ===== */
+#app{position:relative;max-width:460px;height:100dvh;margin:0 auto;overflow:hidden;background:var(--pink)}
+.pg{position:absolute;inset:0;display:flex;flex-direction:column;padding:2.6rem 2rem 1.6rem;overflow:auto;text-align:center;
+  opacity:0;visibility:hidden;translate:0 14px;transition:opacity .7s,translate .7s,visibility .7s}
+.pg.on{opacity:1;visibility:visible;translate:0 0}
+.pg::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:var(--bg-vines) center top/100% auto repeat-y;opacity:var(--vines-opacity)}
+.pg>*{position:relative;z-index:1}
+.dark{background:radial-gradient(circle at 14% 10%,rgba(255,170,90,.5),transparent 11%),radial-gradient(circle at 84% 18%,rgba(255,120,130,.3),transparent 13%),radial-gradient(circle at 60% 6%,rgba(255,200,120,.3),transparent 9%),radial-gradient(ellipse at 50% 105%,#7a1230,var(--deep) 68%);color:#f6d3da}
+.gf-card{position:absolute;inset:0;z-index:5;pointer-events:none;background:var(--frame-card) center/100% 100% no-repeat}
+.brand{font-size:1.9rem;color:var(--wine);margin:-.6rem 0 1.4rem;line-height:1}
+.h{font-weight:700;font-size:1.7rem;letter-spacing:.02em;color:var(--ink)}
+.heart{display:block;color:var(--accent);margin:.5rem 0 1.2rem;font-size:.9rem}
+.nav{margin-top:auto;padding-top:1.8rem;display:flex;align-items:center;gap:1rem;font:500 .72rem var(--sans);letter-spacing:.15em;color:var(--wine)}
+.nav i{flex:1;height:1px;background:currentColor;opacity:.5}
+.nav button{font-size:1.2rem;padding:.3rem .5rem}
+
+/* ===== 1. Cover ===== */
+.cover{justify-content:center;gap:1.1rem}
+.cover .script{font-size:clamp(3.4rem,17vw,4.8rem);line-height:.95;color:var(--rose)}
+.cover .for{color:#f6d3da;opacity:.85}
+/* Cover PNG: a background layer centred in the page, behind the text and envelope (like the vines) */
+.pg>.cover-art{position:absolute;left:50%;top:50%;translate:-50% -50%;width:100%;max-width:none;height:auto;max-height:85%;margin:0;object-fit:contain;z-index:0;opacity:var(--cover-art-opacity);pointer-events:none}
+/* Envelope = just your PNG (frames/envelope.png), nothing drawn on top */
+.env{display:block;position:relative;width:min(80vw,400px);margin:1.2rem auto .8rem;padding:0;rotate:var(--env-tilt)}
+.env img{display:block;width:100%;height:auto;filter:drop-shadow(0 16px 24px rgba(0,0,0,.55));transition:opacity .9s,scale .9s}
+.env.open img{opacity:0;scale:1.08}
+.tap{font:400 1.05rem var(--serif);font-style:italic;opacity:.8}
+
+/* ===== 2. Note ===== */
+.note{text-align:left}
+.note .h,.note .heart{text-align:center}
+.gold-frame{position:relative;isolation:isolate;--fi:9%;--frame:var(--frame-photo)}
+.gold-frame>.photo{position:absolute;inset:var(--fi);z-index:1;overflow:hidden;background:linear-gradient(160deg,#fbd3dc,#f0a9b9)}
+.gold-frame::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:var(--frame) center/100% 100% no-repeat}
+.gf-portrait{--frame:var(--frame-photo);aspect-ratio:4/5;float:left;width:42%;margin:.2rem 1.1rem .5rem -.6rem}
+.photo::before{content:"♥";position:absolute;inset:0;display:grid;place-items:center;color:var(--accent);opacity:.35;font-size:2rem}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.note .to{font-size:2rem;color:var(--accent);line-height:1.1}
+.note .role{font-size:1.5rem;color:var(--wine);line-height:1.1;margin:.2rem 0 .6rem}
+.note p{font-size:1.12rem;line-height:1.55;margin-bottom:.8rem}
+.note .sign{clear:both;font-size:1.9rem;color:var(--accent);margin-top:.6rem;line-height:1.1}
+
+/* ===== 3. Ask ===== */
+.ask{justify-content:center}
+.ask .script{font-size:2.6rem;color:var(--accent);line-height:1}
+.ask .big{font-size:1.9rem;font-weight:500;line-height:1.15;margin:.4rem 0 0}
+.ask .big.script{font-size:3.6rem;margin-top:.2rem}
+.ask p{font-size:1.15rem;max-width:28ch;margin:0 auto .5rem}
+.ask .date{color:var(--wine);margin-bottom:1.6rem}
+.choice{display:flex;gap:.9rem;justify-content:center;align-items:center;margin-top:1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font:600 .8rem var(--sans);letter-spacing:.2em;text-transform:uppercase;
+  padding:1rem 1.6rem;border:1px solid var(--wine);border-radius:999px;min-width:8.5rem;transition:transform .3s,background .3s}
+.btn.yes{background:var(--wine);color:#fff}
+.btn.no{color:var(--wine)}
+.btn:active{transform:scale(.96)}
+.ic{width:1.3em;height:1.3em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== Watching eyes + "Yes?" bubble ===== */
+.eyes{display:flex;justify-content:center;gap:.5rem;margin:-.6rem 0 1rem}
+.eye{position:relative;width:42px;height:42px;border-radius:50%;background:#fff;border:1.5px solid var(--wine);overflow:hidden;box-shadow:inset 0 -3px 6px rgba(107,15,42,.12)}
+.eye b{position:absolute;left:50%;top:50%;width:19px;height:19px;margin:-9.5px 0 0 -9.5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#a3143f,var(--deep));transition:transform .12s ease-out}
+.eye b::after{content:"";position:absolute;left:4px;top:3px;width:5px;height:5px;border-radius:50%;background:#fff}
+.eye u,.eye::after{content:"";position:absolute;left:0;right:0;top:0;height:0;background:var(--wine);transition:height .25s}
+.eye u{z-index:1}
+.eye::after{z-index:2;animation:blink 5s infinite}
+@keyframes blink{0%,93%,100%{height:0}96%{height:100%}}
+.eyes.sus .eye u{height:36%}
+.yeswrap{position:relative;display:inline-flex}
+.bubble{position:absolute;left:50%;bottom:calc(100% + 14px);translate:-50% 6px;scale:.85;opacity:0;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:.45rem;padding:.55rem .9rem;background:#fff;color:var(--wine);border:1px solid var(--wine);border-radius:14px;font:600 .72rem var(--sans);letter-spacing:.06em;box-shadow:0 8px 20px rgba(107,15,42,.2);transition:opacity .3s,translate .3s,scale .3s;z-index:3}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;background:#fff;border:solid var(--wine);border-width:0 1px 1px 0;rotate:45deg;translate:-50% 0}
+.bubble.show{opacity:1;translate:-50% 0;scale:1}
+.bubble .ic{width:1.3em;height:1.3em}
+.btn.yes.nudge{animation:nudge 1s ease-in-out 2}
+@keyframes nudge{50%{box-shadow:0 0 0 9px rgba(107,15,42,.2)}}
+
+/* ===== 4. Yes ===== */
+.yes-pg{justify-content:center;gap:.9rem;padding-bottom:2rem}
+.yes-pg .script{font-size:4.4rem;color:var(--rose);line-height:1}
+.yes-pg p{font-size:1.15rem}
+.wa{display:inline-flex;align-items:center;gap:.8rem;margin:.6rem auto;padding:.9rem 1.5rem;border:1px solid var(--rose);border-radius:999px;color:#f6d3da;text-decoration:none;font:500 .8rem/1.3 var(--sans);letter-spacing:.06em;text-align:left}
+.yes-pg .see{font-size:2rem;color:var(--rose)}
+.couple{display:flex;justify-content:center;gap:.7rem;margin-top:.4rem}
+.gf-thanks{--frame:var(--frame-photo);aspect-ratio:4/5;width:46%;max-width:190px}
+.gf-thanks:first-child{rotate:-3deg}.gf-thanks:last-child{rotate:3deg}
+.thanks{font:500 .68rem var(--sans);letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+
+#lp{position:fixed;inset:0;z-index:99;background:var(--pink);overflow:auto;padding:2rem 1.2rem;font-family:var(--sans)}
+#lp h2{font-family:var(--serif);margin-bottom:1rem}
+#lp .r{display:flex;gap:.6rem;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--rose)}
+#lp b{flex:1}#lp button,#lp a{font:600 .7rem var(--sans);text-transform:uppercase;padding:.5rem .7rem;border:1px solid var(--accent);color:var(--accent);text-decoration:none}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important}.eye::after,.btn.yes.nudge{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8.5 9.5c.5 2.5 3 5 5.5 5.5l1.5-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.6"/></symbol></svg>
+
+<div id="app">
+
+  <!-- PAGE 1: cover + envelope -->
+  <section class="pg dark cover on" id="p0">
+    <span class="script">Our<br>Love Story</span>
+    <p class="caps">and a special invitation</p>
+    <p class="caps for" id="forName"></p>
+    <button class="env" id="env" aria-label="Open the envelope"><img src="frames/envelope.png" alt=""></button><!-- ENVELOPE PNG: frames/envelope.png -->
+    <p class="tap">Some stories are better when shared,<br>and this one includes you</p>
+    <p class="caps" style="opacity:.6">Tap the envelope</p>
+    <img class="cover-art" src="frames/cover-bottom.png" alt="" onerror="this.remove()"><!-- BOTTOM PNG: frames/cover-bottom.png -->
+  </section>
+
+  <!-- PAGE 2: special note -->
+  <section class="pg note" id="p1">
+    <div class="gf-card" aria-hidden="true"></div><!-- GOLD CARD FRAME -->
+    <div class="brand script" style="text-align:center">Our Story</div>
+    <h2 class="h">A Special Note</h2>
+    <span class="heart">♥</span>
+    <div id="noteBody"></div>
+    <div class="nav"><span>01 / 03</span><i></i><button data-go="2" aria-label="Next">→</button></div>
+  </section>
+
+  <!-- PAGE 3: the ask -->
+  <section class="pg ask" id="p2">
+    <div class="gf-card" aria-hidden="true"></div>
+    <span class="script">So…</span>
+    <span class="heart">♥</span>
+    <div class="big">Will you be my</div>
+    <div class="big script" id="askWord">bridesmaid?</div>
+    <span class="heart">♥</span>
+    <p>I can't say “I do” without you beside me. Say yes and be part of the next chapter too.</p>
+    <p class="caps date" id="wDate"></p>
+    <div class="eyes" id="eyes" aria-hidden="true"><i class="eye"><b></b><u></u></i><i class="eye"><b></b><u></u></i></div>
+    <div class="choice">
+      <span class="yeswrap"><button class="btn yes" id="yes"><svg class="ic"><use href="#chat"/></svg>Yes</button><span class="bubble" id="bubble" role="status"><svg class="ic"><use href="#i-check"/></svg><span id="bt">Psst… try Yes</span></span></span>
+      <button class="btn no" id="no">No</button>
+    </div>
+    <div class="nav"><span>02 / 03</span><i></i><button data-go="1" aria-label="Back">←</button></div>
+  </section>
+
+  <!-- YES: celebration -->
+  <section class="pg dark yes-pg" id="p3">
+    <span class="script">Yesss!</span>
+    <span class="heart" style="color:var(--rose)">♥</span>
+    <p>I'm so happy you said yes! 💕</p>
+    <p>Can't wait to have you beside me<br>on this special day!</p>
+    <a class="wa" id="waLink" target="_blank" rel="noopener"><svg class="ic" style="width:1.9rem;height:1.9rem"><use href="#chat"/></svg><span>Join the Bridesmaids<br>WhatsApp Group</span></a>
+    <span class="script see">See you there! ♥</span>
+    <!-- COUPLE PHOTOS: save as photos/couple1.jpg and photos/couple2.jpg -->
+    <div class="couple">
+      <div class="gold-frame gf-thanks"><div class="photo"><img alt="The couple" src="photos/couple1.jpg" onerror="this.remove()"></div></div>
+      <div class="gold-frame gf-thanks"><div class="photo"><img alt="The couple" src="photos/couple2.jpg" onerror="this.remove()"></div></div>
+    </div>
+    <p class="thanks">Thank you for being part of our story</p>
+  </section>
+</div>
+
+<script>
+/* ===== EDIT ME ===== */
+const WEDDING_DATE = 'Thursday 27th July 2028';
+/* After you host the site, paste its address here (e.g. 'https://mybridesmaids.netlify.app/') so the ?links page builds shareable links even when you open it on localhost */
+const SITE_URL = '';
+const WHATSAPP_LINK = 'https://chat.whatsapp.com/YOUR_GROUP_INVITE_CODE';
+const GIRLS = [
+  // e = her emoji, aka = nicknames, role = shown in script under her name, text = your message
+  {name:'Elade-Ebi', e:'💘💜', photo:'photos/eladeebi.jpg', featured:true, role:'My lady, my best half', text:"To my lady, my best half, my sister in the real sense of the word and more, mi amor thank you for sticking with me and understanding me all through these years. As I step into this new phase of my life, will you be my chief bridesmaid? 🥰🥰"},
+  {name:'Hillary', e:'💕', photo:'photos/hillary.jpg', aka:'Eyerinebi', role:'My odogwu friend', text:"My baby girl for life. We've known each other for over 12 years, and it's been nothing short of amazing."},
+  {name:'Chinyere', e:'💕', photo:'photos/chinyere.jpg', role:'My market runs partner 😂', text:"My friend through and through. We've been friends from uni days and you've shown me true friendship over the years."},
+  {name:'Queenie', e:'💕', photo:'photos/queenie.jpg', role:'My personal chef and my gifter', text:"Thank you for always buying me gifts for no reason."},
+  {name:'Denyefa', e:'💜', photo:'photos/denyefa.jpg', aka:'D. girl', role:'My CEO friend', text:"We've been friends from secondary school and I'm glad we've stuck together this far."},
+  {name:'Pereere', e:'🧡', photo:'photos/pereere.jpg', role:'My adopted sister', text:"We've been friends, but now you're my adopted sister."},
+  {name:'Pere', e:'💜', photo:'photos/pere.jpg', role:'My modella', text:"We survived the stress of NDU together and here we are today. You've been a great friend."},
+  {name:'Roseabella', e:'🩷', photo:'photos/roseabella.jpg', aka:'Amaka, Arab', role:'My gossip partner', text:"We've come a long way from secondary school."},
+  {name:'Excel', e:'🧡', photo:'photos/excel.jpg', role:'', text:"Uni brought us together, and here we are years after."},
+  {name:'Caro', e:'🧡', photo:'photos/caro.jpg', role:'My NYSC friendship', text:"You made service year wonderful, and you've been an amazing friend since then."},
+  {name:'Gracie', e:'🧡', photo:'photos/gracie.jpg', role:'My perfume plug', text:"Very serious business woman. You've been an amazing friend."},
+  {name:'Seighe', e:'🖤', photo:'photos/seighe.jpg', role:'My vampire friend since secondary school', text:"You've stuck with me through the years."},
+  {name:'Lizzy', e:'🤎', photo:'photos/lizzy.jpg', role:'My fashionista, my go-to dress maker', text:"You've been an amazing friend and sister."},
+  {name:'Jessica', e:'🤍', photo:'photos/jessica.jpg', role:'My prayer warrior', text:"A lover of God and His kingdom. You've been an amazing friend."},
+  {name:'Tam', e:'🩷', photo:'photos/tam.jpg', role:'My softest baby girl', text:''}
+];
+
+const $ = s => document.querySelector(s), P = new URLSearchParams(location.search);
+const norm = t => (t || '').toLowerCase().replace(/[^a-z]/g, '');
+const guest = (P.get('name') || '').slice(0, 30);
+const me = GIRLS.find(g => norm(g.name) === norm(guest));
+const shown = me ? me.name : guest;
+const esc = t => t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* Personalise */
+if (shown) $('#forName').textContent = 'for ' + shown;
+$('#wDate').textContent = WEDDING_DATE;
+if (me && me.featured) $('#askWord').textContent = 'chief bridesmaid?';
+$('#noteBody').innerHTML =
+  (me ? '<div class="gold-frame gf-portrait"><div class="photo"><img alt="' + esc(me.name) + '" src="' + esc(me.photo) + '" onerror="this.remove()"></div></div>' : '') +
+  '<div class="to script">Dear ' + esc(shown || 'friend') + (me && me.e ? ' ' + me.e : '') + ',</div>' +
+  (me && me.role ? '<div class="role script">' + esc(me.role) + (me.aka ? ' <small>(aka ' + esc(me.aka) + ')</small>' : '') + '</div>' : '') +
+  (me && me.text ? '<p>' + esc(me.text) + '</p>' : '') +
+  (me && me.featured ? '' : '<p>From the laughter we\'ve shared to the secrets we\'ve kept, you\'ve been beside me through every chapter. I can\'t imagine this day without you.</p>') +
+  '<div class="sign script">With all my heart,<br>your friend ♥</div>';
+$('#waLink').href = WHATSAPP_LINK.includes('YOUR_GROUP') ? '#' : WHATSAPP_LINK;
+
+/* Page navigation */
+const pages = [...document.querySelectorAll('.pg')];
+const go = n => { pages.forEach((p, i) => { p.classList.toggle('on', i === n); if (i === n) p.scrollTop = 0; }); if (n === 2) setTimeout(idle, 60); };
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
+
+/* Envelope: flap opens, then the note page appears */
+const env = $('#env');
+const open = () => { if (env.classList.contains('open')) return; env.classList.add('open'); setTimeout(() => go(1), 1000); setTimeout(() => env.classList.remove('open'), 1800); };
+env.onclick = open;
+
+/* YES / NO */
+$('#yes').onclick = () => go(3);
+
+/* Eyes follow your finger or cursor; if you go for NO they lock onto it, squint, and a bubble points you to YES */
+const eyesBox = $('#eyes'), eyeEls = [...eyesBox.children], yesBtn = $('#yes'), noBtn = $('#no'), bubble = $('#bubble');
+let locked = false, calm;
+const look = (x, y) => eyeEls.forEach(e => {
+  const r = e.getBoundingClientRect(), dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2), d = Math.hypot(dx, dy) || 1, m = Math.min(11, d / 6);
+  e.firstChild.style.transform = 'translate(' + dx / d * m + 'px,' + dy / d * m + 'px)';
+});
+const lookAt = el => { const r = el.getBoundingClientRect(); look(r.left + r.width / 2, r.top + r.height / 2); };
+function idle() { if (!locked) lookAt(yesBtn); }
+const onAsk = () => pages[2].classList.contains('on');
+addEventListener('pointermove', e => { if (onAsk() && !locked) look(e.clientX, e.clientY); });
+addEventListener('pointerdown', e => { if (onAsk() && !locked) look(e.clientX, e.clientY); });
+addEventListener('resize', idle);
+
+const hints = ['Psst… try Yes', 'Yes is right here', 'You know you want to', 'Go on, tap Yes'];
+const nos = ['Are you sure?', 'Think again', 'Just say yes!', 'Pretty please?'];
+let nn = 0;
+const caught = () => {
+  locked = true; lookAt(noBtn); eyesBox.classList.add('sus');
+  $('#bt').textContent = hints[nn % hints.length];
+  bubble.classList.add('show'); yesBtn.classList.remove('nudge'); void yesBtn.offsetWidth; yesBtn.classList.add('nudge');
+  clearTimeout(calm);
+  calm = setTimeout(() => { locked = false; eyesBox.classList.remove('sus'); bubble.classList.remove('show'); idle(); }, 2600);
+};
+noBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') caught(); });
+noBtn.addEventListener('pointerdown', caught);
+noBtn.onclick = () => {
+  noBtn.textContent = nos[nn++ % nos.length];
+  yesBtn.style.scale = Math.min(1.35, 1 + nn * .08);
+};
+
+/* ?links opens a private page to copy or WhatsApp each friend's personal link */
+if (P.has('links')) {
+  const base = SITE_URL || location.href.split(/[?#]/)[0], d = document.createElement('div'); d.id = 'lp';
+  d.innerHTML = '<h2>Personal links</h2>' + GIRLS.map(g => {
+    const u = base + '?name=' + encodeURIComponent(g.name);
+    return '<div class="r"><b>' + g.name + '</b><button data-u="' + u + '">Copy</button><a target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('A little something for you: ' + u) + '">WhatsApp</a></div>';
+  }).join('');
+  d.onclick = async e => { const u = e.target.dataset.u; if (!u) return; try { await navigator.clipboard.writeText(u); } catch (x) { prompt('Copy this link', u); } e.target.textContent = 'Copied'; };
+  document.body.appendChild(d);
+}
+</script>
+</body>
+</html>
